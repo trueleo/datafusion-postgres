@@ -20,7 +20,7 @@ use rust_decimal::Decimal;
 
 use crate::encoder::row_encoder::RowEncoder;
 
-pub(crate) fn into_pg_type(df_type: &DataType) -> PgWireResult<Type> {
+pub fn into_pg_type(df_type: &DataType) -> PgWireResult<Type> {
     Ok(match df_type {
         DataType::Null => Type::UNKNOWN,
         DataType::Boolean => Type::BOOL,
@@ -111,7 +111,7 @@ pub(crate) fn into_pg_type(df_type: &DataType) -> PgWireResult<Type> {
     })
 }
 
-pub(crate) fn df_schema_to_pg_fields(
+pub fn df_schema_to_pg_fields(
     schema: &DFSchema,
     format: &Format,
 ) -> PgWireResult<Vec<FieldInfo>> {
@@ -132,7 +132,7 @@ pub(crate) fn df_schema_to_pg_fields(
         .collect::<PgWireResult<Vec<FieldInfo>>>()
 }
 
-pub(crate) async fn encode_dataframe<'a>(
+pub async fn encode_dataframe<'a>(
     df: DataFrame,
     format: &Format,
 ) -> PgWireResult<QueryResponse<'a>> {
@@ -168,7 +168,7 @@ pub(crate) async fn encode_dataframe<'a>(
 /// If the type is empty or unknown, we fallback to datafusion inferenced type
 /// from `inferenced_types`.
 /// An error will be raised when neither sources can provide type information.
-pub(crate) fn deserialize_parameters<S>(
+pub fn deserialize_parameters<S>(
     portal: &Portal<S>,
     inferenced_types: &[Option<&DataType>],
 ) -> PgWireResult<ParamValues>
